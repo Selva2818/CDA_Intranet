@@ -53,6 +53,22 @@ export async function getChoiceDropdownOptions(
   return Array.isArray(fields) ? {} : [];
 }
 
+export async function getConfigServiceDepartmentType(): Promise<any> {
+  try {
+    const items = await sp.web.lists
+      .getByTitle(ListName.Config_Service_Department_Type)
+      .items.select("Id", "DeptType_En", "DeptType_Ar")();
+    return items.map((item) => ({
+      id: item.Id,
+      DeptType_En: item.DeptType_En,
+      DeptType_Ar: item.DeptType_Ar,
+    }));
+  } catch (err) {
+    console.error("Error fetching Config_Service_Department_Type:", err);
+    return [];
+  }
+}
+
 const LIST_NAME = ListName.Service_Task;
 
 export const ServiceTaskService = {
