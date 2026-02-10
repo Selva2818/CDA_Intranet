@@ -8,7 +8,8 @@
 import { message, Modal, Skeleton } from "antd";
 import * as React from "react";
 import {
-  getChoiceDropdownOptions,
+  // getChoiceDropdownOptions,
+  getConfigServiceDepartmentType,
   ServiceTaskService,
 } from "../../../../Services/Department/DepartmentService";
 import { IModalState, ServiceState } from "../../../Type/Interface";
@@ -18,6 +19,7 @@ import ReInput from "../../FormInputs/Input/CustomInput";
 import CustomModal from "../../modal/Custommodal";
 import { useLanguage } from "../../useContext/useContext";
 import styles from "./DepartmentService.module.scss";
+// import { ListName } from "../../Config/Constant";
 const defaultimg: any = require("../../../assets/images/global.png");
 
 const DepartmentService = ({ deptId, lang }: any) => {
@@ -162,23 +164,18 @@ const DepartmentService = ({ deptId, lang }: any) => {
       setLoading(false);
     }
   };
-  const loadItemTypeChoices = async () => {
-    const result = (await getChoiceDropdownOptions(
-      ["DeptType_En", "DeptType_Ar"],
-      "Service_Task",
-    )) as Record<string, any[]>;
+  const loadItemTypeChoicesConfig = async () => {
+    const result = await getConfigServiceDepartmentType();
+
     console.log("result: ", result);
 
-    const enOptions = result.DeptType_En || [];
-    const arOptions = result.DeptType_Ar || [];
-
-    if (enOptions.length !== arOptions.length) {
+    if (result.length === 0) {
       console.error("ItemType EN/AR choice count mismatch");
     }
 
-    const map = enOptions.map((en, index) => ({
-      en: en.value,
-      ar: arOptions[index]?.value || "",
+    const map = result.map((val: any) => ({
+      en: val.DeptType_En,
+      ar: val.DeptType_Ar,
     }));
 
     setItemTypeMap(map);
@@ -329,7 +326,7 @@ const DepartmentService = ({ deptId, lang }: any) => {
 
   React.useEffect(() => {
     getServiedata();
-    loadItemTypeChoices();
+    loadItemTypeChoicesConfig();
   }, []);
   const itemTypeEnOptions = itemTypeMap.map((i) => ({
     label: i.en,

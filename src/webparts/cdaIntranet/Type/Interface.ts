@@ -1,3 +1,5 @@
+/* eslint-disable @rushstack/no-new-null */
+/* eslint-disable @typescript-eslint/no-explicit-any */
 export interface IService {
   id: number;
   Title: string;
@@ -72,4 +74,5 @@ export interface IListName {
   Type_Config: string;
   Service_Task: string;
   News_Details: string;
+  Config_Service_Department_Type: string;
 }
